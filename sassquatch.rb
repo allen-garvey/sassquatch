@@ -4,6 +4,8 @@
 files_to_be_created = <<-eof
 _header
 _nav
+something.scss
+_main.scss
 eof
 
 puts "\n\n**************\n"
@@ -22,7 +24,12 @@ target_directory = target_directory + '/'
 index_import_string = ''
 
 files_to_be_created.split("\n").each do |file|
-	filename = file + '.scss'
+	file.gsub!(/[\n\t\s]+$/, '')
+	if file !~ /\.scss$/
+		filename = file + '.scss'
+	else
+		filename = file	
+	end
 	process_succeeded = system("touch \"#{target_directory}#{filename}\"")
 	index_import_string = index_import_string + "@import \"#{filename}\";\n"
 end
