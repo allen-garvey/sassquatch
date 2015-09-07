@@ -1,30 +1,46 @@
 # Script to init sass partials in a directory and register them in an _index.scss file
+# argument 0 is a comma delimiter list of filenames to be created, with or without .scss extension
+# argument 1 is directory where the files and _index.scss with imports are to be placed
+# the script is non-destructive, so that existing files will not be deleted or overwritten
+# and an existing _index.scss file will only be appended to
 
-# filename minus .scss extension - e.g. _header or test
-files_to_be_created = <<-eof
-_header
-_nav
-something.scss
-_main.scss
-eof
+program_name = "Sassquatch"
+version_number = "0.2.0"
+argument_list = "\t[0] comma delimited list of filenames and\n\t[1] target directory for new .scss files"
 
-puts "\n\n**************\n"
-puts "Sassquatch is a script to initialize a directory with scss files, as well as an _index.scss partial"
-puts "If there is already an _index.scss file in the directory, don't worry, we will just append to it.\n\n"
-puts "Please enter the destination directory to be initialized:"
+def exit_with_msg(msg, program_name, argument_list)
+	abort "\n#{program_name} #{msg}\n\tArguments required:\n#{argument_list}"
+end
 
-target_directory = gets.chomp
+if ARGV.length > 0 and ARGV[0] =~ /[-]+help$/
+	exit_with_msg("\nInitialize a directory with .scss files and an _index.scss file importing them", program_name, argument_list)
+elsif ARGV.length > 0 and ARGV[0] =~ /[-]+v(ersion)?$/
+	abort "\n#{program_name} version #{version_number}"
+elsif ARGV.length < 2
+	exit_with_msg('error missing arguments', program_name, argument_list)
+elsif ARGV.length > 2
+	exit_with_msg('error too many arguments given', program_name, argument_list)
+elsif ARGV[1] =~ /\.scss|^_/
+	exit_with_msg('error no target directory given (argument [1] detected to be .scss file)', program_name, argument_list)
+end
 
-# clean up target directory input
-target_directory.gsub!(/\/?[\s\t\n]*$/, '')
-# unescape spaces since we're putting the command in quotes
-target_directory.gsub!(/\\\s/, ' ')
-target_directory = target_directory + '/'
+files_to_be_created = ARGV[0].dup #requires .dup because of frozen string
+target_directory = ARGV[1].dup
+
+#cleans input by removing trailing whitespace and forward slash 
+#and un-escaping escaped spaces
+def clean_bash_input(input)
+	cleaned_input = input.gsub(/\/?[\s\t\n]*$|^[\n\t\s]+/, '')
+	cleaned_input.gsub(/\\\s/, ' ')
+end
+
+target_directory = clean_bash_input(target_directory)
+target_directory = target_directory + '/' #add back trailing slash since clean_bash_input removes it
 
 index_import_string = ''
 
-files_to_be_created.split("\n").each do |file|
-	file.gsub!(/[\n\t\s]+$/, '')
+files_to_be_created.split(",").each do |file|
+	file = clean_bash_input(file)
 	if file !~ /\.scss$/
 		filename = file + '.scss'
 	else
