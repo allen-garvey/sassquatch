@@ -1,6 +1,6 @@
 #Sassquatch
 
-Sassquatch is a Ruby script to quickly create empty .scss files or partials in a directory as well as create or append to an existing _index.scss file the appropriate `@import` of the newly created .scss files.
+Sassquatch is a command-line program to quickly initialize empty .scss files or partials in a directory as well as create or append to an existing _index.scss file the appropriate `@import` for those newly created .scss files.
 
 ##Dependencies
 
@@ -8,8 +8,10 @@ Sassquatch is a Ruby script to quickly create empty .scss files or partials in a
 
 ##Getting Started
 
-* Replace the `files_to_be_created` variable with newline delimited list of filenames or partials to be created, minus the .scss extension e.g. `_partial.scss` or `test.scss`
-* Use Ruby to run the script and enter the destination directory when prompted
+* To run Sassquatch, type `ruby path/to/sassquatch/sassquatch.rb` followed by arguments
+* Sassquatch takes two arguments: a comma-delimited list of filenames to be created (if there are commas in the filenames surround the whole list in quotes), and the directory to create them in
+* A full example would be: `ruby path/to/sassquatch/sassquatch.rb test.scss,_nav,_header.scss ~/Sites/test_site/sass`
+* The arguments `-help` and `-v` are also used to display help, or version number respectively
 
 ##License
 
