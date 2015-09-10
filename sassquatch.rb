@@ -21,7 +21,8 @@ elsif ARGV.length < 2
 elsif ARGV.length > 2
 	exit_with_msg('error too many arguments given', program_name, argument_list)
 elsif ARGV[1] =~ /\.scss|^_/
-	exit_with_msg('error no target directory given (argument [1] detected to be .scss file)', program_name, argument_list)
+	wrong_arg = ARGV[1].match(/\.scss|^_.*/)[0]
+	exit_with_msg("error no target directory given (argument[1] {#{wrong_arg}} inferred to be .scss file)", program_name, argument_list)
 end
 
 files_to_be_created = ARGV[0].dup #requires .dup because of frozen string
