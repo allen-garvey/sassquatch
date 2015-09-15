@@ -48,6 +48,8 @@ files_to_be_created.split(",").each do |file|
 		filename = file	
 	end
 	process_succeeded = system("touch \"#{target_directory}#{filename}\"")
+	# add doc comment at top
+	process_succeeded = system("echo \"/*\n * \n */\n\n\" >> \"#{target_directory}#{filename}\"")
 	index_import_string = index_import_string + "@import \"#{filename}\";\n"
 end
 
