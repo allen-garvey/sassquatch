@@ -51,7 +51,7 @@ files_to_be_created.split(",").each do |file|
 	# add doc comment at top
 	doc_comment = <<-eos
 /*
-* Styles for #{file.gsub(/^_/, '')}
+* Styles for #{file.gsub(/^_/, '').gsub(/_+/, ' ')}
 */
 eos
 	process_succeeded = system("echo \"#{doc_comment}\" >> \"#{target_directory}#{filename}\"")
